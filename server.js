@@ -11,6 +11,12 @@ let movies = [
   { id: 4, film_id:'58611129-2dbc-4a81-a72f-77ddfc1b1b49', user: 'Anggi',rating: 5, comment:'Film terbaik sepanjang masa'}
 ];
 
+//endpoint
+app.get('/', (req, res) => {
+    res.send('Movie API is running');
+})
+
+//start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
