@@ -16,6 +16,13 @@ app.get('/', (req, res) => {
     res.send('Movie API is running');
 })
 
+//GET status
+app.get('/status', (req, res) => {
+    res.json(status)
+})
+
+
+
 //start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
