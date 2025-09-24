@@ -35,14 +35,9 @@ let movies = [
   },
 ];
 
-//endpoint
-app.get("/", (req, res) => {
-  res.send("Movie API is running");
-});
-
-//GET status
+//endpoint GET STATUS
 app.get("/status", (req, res) => {
-  res.json(movies);
+  res.status(200).json("Movie API is running");
 });
 
 //GET reviews
@@ -51,7 +46,15 @@ app.get("/reviews", (req, res) => {
 });
 
 //GET reviews id
-app;
+app.get("/reviews/:id", (req, res)=> {
+  const reviewID = parseInt(req.params.id);
+  const review = movies.find ((review) => review.id === reviewID);
+  if (!review) {
+    res.status(200).json(review);
+  } else {
+    res.status(404).json({error: "review not found"});
+    }
+  });
 
 //start the server
 app.listen(PORT, () => {
