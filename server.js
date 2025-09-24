@@ -79,6 +79,7 @@ app.post("/reviews", (req, res) => {
   res.status(201).json(newReview);
 });
 
+//git reviews
 app.put("/reviews/:id", (req, res) => {
   const reviewId = parseInt(req.params.id);
   const { title, rating, comment } = req.body;
@@ -102,6 +103,21 @@ app.put("/reviews/:id", (req, res) => {
   };
   res.json(reviews[reviewIndex]);
 })
+
+//git delete
+app.delete("/reviews/:id", (req, res) => {
+    const reviewId = parseInt(req.params.id);
+    const reviewIndex = reviews.findIndex((r) => r.id === reviewId);
+
+    if (reviewIndex === -1) {
+        return res.status(404).json({ message: "Review not found" });
+    }
+
+    // Hapus review dari array
+    const deletedReview = reviews.splice(reviewIndex, 1)[0];
+
+    res.json({ message: "Review deleted successfully", review: deletedReview });
+});
 
 //start the server
 app.listen(PORT, () => {
