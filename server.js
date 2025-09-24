@@ -4,7 +4,7 @@ const PORT = 3300;
 
 app.use(express.json());
 
-let movies = [
+let reviews = [
   {
     id: 1,
     film_id: "86e544fd-79de-4e04-be62-5be67d8dd92e",
@@ -35,40 +35,43 @@ let movies = [
   },
 ];
 
-//endpoint GET STATUS
+// endpoint GET STATUS
 app.get("/status", (req, res) => {
   res.status(200).json("Movie API is running");
 });
 
-//GET reviews
+// GET reviews
 app.get("/reviews", (req, res) => {
   res.json(reviews);
 });
 
-//GET reviews id
+// GET reviews id
 app.get("/reviews/:id", (req, res) => {
   const reviewID = parseInt(req.params.id);
-  const review = movies.find((review) => review.id === reviewID);
-  if (!review) {
+  const review = reviews.find((review) => review.id === reviewID);
+
+  if (review) {
     res.status(200).json(review);
   } else {
-    res.status(404).json({ error: "review not found" });
+    res.status(404).json({ error: "Ulasan tidak ditemukan" });
   }
 });
 
+// POST /reviews
 app.post("/reviews", (req, res) => {
   const { film_id, user, rating, comment } = req.body;
 
-  //Validasi input
+  // Validasi input
   if (!film_id || !user || !rating || !comment) {
     return res.status(400).json({
       error: "Semua bidang wajib diisi: film_id, user, rating, comment",
     });
   }
 
-  //objek ulasan baru dengan ID unik
+  // Membuat ID baru secara berurutan
+  const newId = reviews.length > 0 ? reviews[reviews.length - 1].id + 1 : 1;
   const newReview = {
-    id: uuidv4(),
+    id: newId,
     film_id,
     user,
     rating,
@@ -79,47 +82,50 @@ app.post("/reviews", (req, res) => {
   res.status(201).json(newReview);
 });
 
-//git reviews
+// PUT /reviews/:id
 app.put("/reviews/:id", (req, res) => {
   const reviewId = parseInt(req.params.id);
-  const { title, rating, comment } = req.body;
+  const { film_id, user, rating, comment } = req.body;
 
-  const reviewIndex = review.findIndex((r) => r.id === reviewId);
+  const reviewIndex = reviews.findIndex((r) => r.id === reviewId);
 
   if (reviewIndex === -1) {
-    return res.status(404).json({ message: "Review not found" });
+    return res.status(404).json({ error: "Ulasan tidak ditemukan" });
   }
 
-  if (!title || !rating || !comment) {
-    return res.status(400).json({ message: "All fields (title, rating, comment) are required"});
+  // Validasi input untuk PUT
+  if (!film_id || !user || !rating || !comment) {
+    return res
+      .status(400)
+      .json({
+        error: "Semua bidang wajib diisi: film_id, user, rating, comment",
+      });
   }
 
-  // Update the review
   reviews[reviewIndex] = {
     id: reviewId,
-    title,
+    film_id,
+    user,
     rating,
-    comment
+    comment,
   };
   res.json(reviews[reviewIndex]);
-})
-
-//git delete
-app.delete("/reviews/:id", (req, res) => {
-    const reviewId = parseInt(req.params.id);
-    const reviewIndex = reviews.findIndex((r) => r.id === reviewId);
-
-    if (reviewIndex === -1) {
-        return res.status(404).json({ message: "Review not found" });
-    }
-
-    // Hapus review dari array
-    const deletedReview = reviews.splice(reviewIndex, 1)[0];
-
-    res.json({ message: "Review deleted successfully", review: deletedReview });
 });
 
-//start the server
+// DELETE /reviews/:id
+app.delete("/reviews/:id", (req, res) => {
+  const reviewId = parseInt(req.params.id);
+  const reviewIndex = reviews.findIndex((r) => r.id === reviewId);
+
+  if (reviewIndex === -1) {
+    return res.status(404).json({ error: "Ulasan tidak ditemukan" });
+  }
+
+  reviews.splice(reviewIndex, 1);
+  res.status(200).json({ message: "Ulasan berhasil dihapus" });
+});
+
+// Jalankan server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
