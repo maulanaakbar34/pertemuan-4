@@ -79,6 +79,30 @@ app.post("/reviews", (req, res) => {
   res.status(201).json(newReview);
 });
 
+app.put("/reviews/:id", (req, res) => {
+  const reviewId = parseInt(req.params.id);
+  const { title, rating, comment } = req.body;
+
+  const reviewIndex = review.findIndex((r) => r.id === reviewId);
+
+  if (reviewIndex === -1) {
+    return res.status(404).json({ message: "Review not found" });
+  }
+
+  if (!title || !rating || !comment) {
+    return res.status(400).json({ message: "All fields (title, rating, comment) are required"});
+  }
+
+  // Update the review
+  reviews[reviewIndex] = {
+    id: reviewId,
+    title,
+    rating,
+    comment
+  };
+  res.json(reviews[reviewIndex]);
+})
+
 //start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
