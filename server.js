@@ -46,15 +46,38 @@ app.get("/reviews", (req, res) => {
 });
 
 //GET reviews id
-app.get("/reviews/:id", (req, res)=> {
+app.get("/reviews/:id", (req, res) => {
   const reviewID = parseInt(req.params.id);
-  const review = movies.find ((review) => review.id === reviewID);
+  const review = movies.find((review) => review.id === reviewID);
   if (!review) {
     res.status(200).json(review);
   } else {
-    res.status(404).json({error: "review not found"});
-    }
-  });
+    res.status(404).json({ error: "review not found" });
+  }
+});
+
+app.post("/reviews", (req, res) => {
+  const { film_id, user, rating, comment } = req.body;
+
+  //Validasi input
+  if (!film_id || !user || !rating || !comment) {
+    return res.status(400).json({
+      error: "Semua bidang wajib diisi: film_id, user, rating, comment",
+    });
+  }
+
+  //objek ulasan baru dengan ID unik
+  const newReview = {
+    id: uuidv4(),
+    film_id,
+    user,
+    rating,
+    comment,
+  };
+
+  reviews.push(newReview);
+  res.status(201).json(newReview);
+});
 
 //start the server
 app.listen(PORT, () => {
