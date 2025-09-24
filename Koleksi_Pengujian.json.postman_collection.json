@@ -1,0 +1,35 @@
+{
+	"info": {
+		"_postman_id": "28008962-1fc9-45fc-8045-ad57a9c3b5ab",
+		"name": "Koleksi_Pengujian.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47947417",
+		"_collection_link": "https://farhansyah-76-s-team.postman.co/workspace/Team-Workspace~d7359b99-90bf-45a2-8367-c73c56554c97/collection/47947417-28008962-1fc9-45fc-8045-ad57a9c3b5ab?action=share&source=collection_link&creator=47947417"
+	},
+	"item": [
+		{
+			"name": "reviews/1",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "reviews",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "reviews/:id",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
